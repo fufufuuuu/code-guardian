@@ -1,0 +1,196 @@
+{
+  "rules": [
+    {
+      "id": "rule-1",
+      "name": "硬编码密码",
+      "pattern": "(?i)password\\s*=\\s*[\"'][^\"']*[\"']",
+      "type": "security",
+      "severity": "high",
+      "triggerAI": false
+    },
+    {
+      "id": "rule-2",
+      "name": "SQL注入风险",
+      "pattern": "(?i)statement\\.execute\\([^)]*\\+[^)]*\\)",
+      "type": "security",
+      "severity": "high",
+      "triggerAI": false
+    },
+    {
+      "id": "rule-3",
+      "name": "不安全的API调用",
+      "pattern": "(?i)Runtime\\.getRuntime\\(\\)\\.exec\\(",
+      "type": "security",
+      "severity": "high",
+      "triggerAI": false
+    },
+    {
+      "id": "rule-4",
+      "name": "空指针风险",
+      "pattern": "\\.[a-zA-Z0-9_]+\\(\\)",
+      "type": "bug",
+      "severity": "medium",
+      "triggerAI": true
+    },
+    {
+      "id": "rule-5",
+      "name": "异常处理不当",
+      "pattern": "catch\\s*\\(\\s*Exception\\s+\\w+\\s*\\)\\s*\\{\\s*\\}",
+      "type": "code-quality",
+      "severity": "medium",
+      "triggerAI": false
+    },
+    {
+      "id": "rule-6",
+      "name": "硬编码API密钥",
+      "pattern": "(?i)(api[_-]?key|secret|token)\\s*=\\s*[\"'][^\"']*[\"']",
+      "type": "security",
+      "severity": "high",
+      "triggerAI": false
+    },
+    {
+      "id": "rule-7",
+      "name": "不安全的随机数生成",
+      "pattern": "new\\s+Random\\(\\)",
+      "type": "security",
+      "severity": "medium",
+      "triggerAI": false
+    },
+    {
+      "id": "rule-8",
+      "name": "敏感信息泄露",
+      "pattern": "(?i)(System\\.out\\.println|logger\\.info)\\([^)]*password[^)]*\\)",
+      "type": "security",
+      "severity": "medium",
+      "triggerAI": false
+    },
+    {
+      "id": "rule-9",
+      "name": "无限循环风险",
+      "pattern": "while\\s*\\(\\s*true\\s*\\)",
+      "type": "bug",
+      "severity": "medium",
+      "triggerAI": true
+    },
+    {
+      "id": "rule-10",
+      "name": "资源未关闭",
+      "pattern": "new\\s+(FileInputStream|FileOutputStream|BufferedReader|BufferedWriter)\\(",
+      "type": "bug",
+      "severity": "medium",
+      "triggerAI": true
+    },
+    {
+      "id": "rule-11",
+      "name": "大对象创建",
+      "pattern": "new\\s+byte\\[\\s*[0-9]{6,}\\s*\\]",
+      "type": "performance",
+      "severity": "medium",
+      "triggerAI": false
+    },
+    {
+      "id": "rule-12",
+      "name": "魔法数字",
+      "pattern": "[0-9]{3,}",
+      "type": "code-quality",
+      "severity": "low",
+      "triggerAI": false
+    },
+    {
+      "id": "rule-13",
+      "name": "未使用的变量",
+      "pattern": "(private|public|protected)\\s+\".+\\s+\\w+\\s*=\\s*",
+      "type": "code-quality",
+      "severity": "low",
+      "triggerAI": false
+    },
+    {
+      "id": "rule-14",
+      "name": "过长的方法",
+      "pattern": "\\{[\\s\\S]{500,}\\}",
+      "type": "code-quality",
+      "severity": "medium",
+      "triggerAI": true
+    },
+    {
+      "id": "rule-15",
+      "name": "复杂的条件语句",
+      "pattern": "if\\s*\\([\\s\\S]{100,}\\)",
+      "type": "code-quality",
+      "severity": "low",
+      "triggerAI": true
+    },
+    {
+      "id": "rule-16",
+      "name": "不安全的哈希算法",
+      "pattern": "(?i)MessageDigest\\.getInstance\\([\"'](MD2|MD4|MD5|SHA-1)[\"']\\)",
+      "type": "security",
+      "severity": "high",
+      "triggerAI": false
+    },
+    {
+      "id": "rule-17",
+      "name": "硬编码文件路径",
+      "pattern": "[\\/\\\\][a-zA-Z0-9_]+[\\/\\\\][a-zA-Z0-9_]+\\.[a-zA-Z0-9]+",
+      "type": "code-quality",
+      "severity": "low",
+      "triggerAI": false
+    },
+    {
+      "id": "rule-18",
+      "name": "字符串拼接循环",
+      "pattern": "for\\s*\\([^\\)]*\\)\\s*\\{[^\\}]*\\+",
+      "type": "performance",
+      "severity": "medium",
+      "triggerAI": false
+    },
+    {
+      "id": "rule-19",
+      "name": "未使用的导入",
+      "pattern": "import\\s+[a-zA-Z0-9\\.]+;\\s*$",
+      "type": "code-quality",
+      "severity": "low",
+      "triggerAI": false
+    },
+    {
+      "id": "rule-20",
+      "name": "同步方法过多",
+      "pattern": "synchronized\\s+void\\s+\\w+\\(",
+      "type": "performance",
+      "severity": "medium",
+      "triggerAI": true
+    },
+    {
+      "id": "rule-21",
+      "name": "过时的API调用",
+      "pattern": "@Deprecated",
+      "type": "code-quality",
+      "severity": "low",
+      "triggerAI": false
+    },
+    {
+      "id": "rule-22",
+      "name": "不安全的类型转换",
+      "pattern": "\(\\w+\\)\\s*\\w+",
+      "type": "bug",
+      "severity": "medium",
+      "triggerAI": true
+    },
+    {
+      "id": "rule-23",
+      "name": "过长的参数列表",
+      "pattern": "\\w+\\s*\\(\\s*\\w+\\s+\\w+\\s*,\\s*\\w+\\s+\\w+\\s*,\\s*\\w+\\s+\\w+\\s*,\\s*\\w+\\s+\\w+\\s*,\\s*\\w+\\s+\\w+\\s*\\)",
+      "type": "code-quality",
+      "severity": "low",
+      "triggerAI": false
+    },
+    {
+      "id": "rule-24",
+      "name": "使用System.exit",
+      "pattern": "System\\.exit\\(",
+      "type": "code-quality",
+      "severity": "medium",
+      "triggerAI": false
+    }
+  ]
+}
