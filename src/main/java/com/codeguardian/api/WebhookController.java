@@ -1,7 +1,7 @@
 package com.codeguardian.api;
 
 import com.codeguardian.api.response.ApiResponse;
-import com.codeguardian.application.ReviewService;
+import com.codeguardian.application.ReviewOrchestrator;
 import com.codeguardian.domain.model.ReviewTask;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,7 +25,7 @@ import java.util.concurrent.Executors;
 public class WebhookController {
     private static final Logger logger = LoggerFactory.getLogger(WebhookController.class);
     @Autowired
-    private ReviewService reviewService;
+    private ReviewOrchestrator reviewOrchestrator;
     private final ObjectMapper objectMapper;
     private final ExecutorService executorService;
     
@@ -73,7 +73,7 @@ public class WebhookController {
             // 异步处理审查任务
             executorService.submit(() -> {
                 try {
-                    reviewService.processTask(task);
+                    reviewOrchestrator.review(task);
                     logger.info("Successfully processed review task for PR #{}", task.getPrNumber());
                 } catch (Exception e) {
                     logger.error("Error processing Gitee webhook: {}", e.getMessage(), e);
@@ -123,7 +123,7 @@ public class WebhookController {
             // 异步处理审查任务
             executorService.submit(() -> {
                 try {
-                    reviewService.processTask(task);
+                    reviewOrchestrator.review(task);
                     logger.info("Successfully processed review task for PR #{}", task.getPrNumber());
                 } catch (Exception e) {
                     logger.error("Error processing GitHub webhook: {}", e.getMessage(), e);
