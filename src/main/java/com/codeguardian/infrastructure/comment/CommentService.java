@@ -47,14 +47,12 @@ public class CommentService {
     private String generateComment(List<Issue> issues) {
         StringBuilder comment = new StringBuilder();
         
-        comment.append("## AI Code Review\n\n");
+        comment.append("## 🤖 AI Code Review\n\n");
         
         if (issues.isEmpty()) {
             comment.append("### ✅ 未发现严重问题\n\n");
             comment.append("代码质量良好，未发现明显的安全风险或性能问题。\n");
         } else {
-            comment.append("### ⚠️ 发现 " + issues.size() + " 个问题\n\n");
-            
             // 按文件分组
             Map<String, List<Issue>> issuesByFile = issues.stream()
                 .collect(Collectors.groupingBy(Issue::getFile));
@@ -63,16 +61,19 @@ public class CommentService {
                 String file = entry.getKey();
                 List<Issue> fileIssues = entry.getValue();
                 
-                comment.append("#### " + file + "\n\n");
+                comment.append("File: " + file + "\n\n");
+                
+                int issueNumber = 1;
                 for (Issue issue : fileIssues) {
-                    comment.append("- [" + getSeverityEmoji(issue.getSeverity()) + "] " + issue.getMessage() + "\n");
+                    comment.append(issueNumber + "️⃣ " + issue.getMessage() + "  \n");
                     if (issue.getLine() != null) {
-                        comment.append("  **行号:** " + issue.getLine() + "\n");
+                        comment.append("line: " + issue.getLine() + "\n");
                     }
                     if (issue.getSuggestion() != null && !issue.getSuggestion().isEmpty()) {
-                        comment.append("  **建议:** " + issue.getSuggestion() + "\n");
+                        comment.append("建议：" + issue.getSuggestion() + "\n");
                     }
                     comment.append("\n");
+                    issueNumber++;
                 }
             }
         }

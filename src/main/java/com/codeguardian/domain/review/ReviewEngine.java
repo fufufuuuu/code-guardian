@@ -44,21 +44,23 @@ public class ReviewEngine {
         // 规则审查
         List<Issue> ruleIssues = ruleEngine.check(chunk);
         
-        // AI审查
+        // AI审查 - 只有当规则检测到问题时才调用AI
         List<Issue> aiIssues = new ArrayList<>();
-        try {
-            String prompt = promptBuilder.buildPrompt(chunk);
-            String aiResponse = llmService.review(prompt);
-            aiIssues = issueExtractor.extract(aiResponse);
-            
-            // 设置文件路径和行号
-            for (Issue issue : aiIssues) {
-                issue.setFile(chunk.getFilePath());
-                issue.setLine(chunk.getStartLine());
+        if (!ruleIssues.isEmpty()) {
+            try {
+                String prompt = promptBuilder.buildPrompt(chunk);
+                String aiResponse = llmService.review(prompt);
+                aiIssues = issueExtractor.extract(aiResponse);
+                
+                // 设置文件路径和行号
+                for (Issue issue : aiIssues) {
+                    issue.setFile(chunk.getFilePath());
+                    issue.setLine(chunk.getStartLine());
+                }
+            } catch (Exception e) {
+                // 记录错误但不影响整体流程
+                logger.warn("AI review failed for file {}: {}", chunk.getFilePath(), e.getMessage());
             }
-        } catch (Exception e) {
-            // 记录错误但不影响整体流程
-            logger.warn("AI review failed for file {}: {}", chunk.getFilePath(), e.getMessage());
         }
         
         // 聚合问题
