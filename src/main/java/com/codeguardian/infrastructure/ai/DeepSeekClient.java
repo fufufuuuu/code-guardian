@@ -1,23 +1,39 @@
-package src.main.java.com.codeGuardian.llm;
+package com.codeguardian.infrastructure.ai;
 
+import com.codeguardian.config.AppConfig;
+import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class DeepseekClient {
-    private static final String API_URL = "https://api.deepseek.com/v1/chat/completions";
-    private static final String API_KEY = "your_api_key";
+/**
+ * DeepSeek客户端实现
+ */
+@Service
+public class DeepSeekClient implements LLMService {
+    private final String API_URL;
+    private final String API_KEY;
     private final ObjectMapper objectMapper;
-
-    public DeepseekClient() {
+    
+    public DeepSeekClient(AppConfig appConfig) {
+        this.API_URL = appConfig.getDeepseekApiUrl();
+        this.API_KEY = appConfig.getDeepseekApiKey();
+        this.objectMapper = new ObjectMapper();
+    }
+    
+    public DeepSeekClient() {
+        this.API_URL = "https://api.deepseek.com/v1/chat/completions";
+        this.API_KEY = "your_api_key";
         this.objectMapper = new ObjectMapper();
     }
 
-    public String reviewCode(String diff) throws Exception {
+    @Override
+    public String review(String prompt) throws Exception {
         URL url = new URL(API_URL);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
@@ -34,12 +50,12 @@ public class DeepseekClient {
         // 构建消息
         Map<String, String> message = new HashMap<>();
         message.put("role", "user");
-        message.put("content", "请对以下代码 diff 进行审查，指出潜在的问题和改进建议：\n" + diff);
+        message.put("content", prompt);
 
         requestBody.put("messages", new Object[] { message });
 
         // 发送请求
-        try (var os = connection.getOutputStream()) {
+        try (OutputStream os = connection.getOutputStream()) {
             byte[] input = objectMapper.writeValueAsString(requestBody).getBytes("utf-8");
             os.write(input, 0, input.length);
         }

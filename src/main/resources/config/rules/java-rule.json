@@ -1,0 +1,44 @@
+{
+  "rules": [
+    {
+      "id": "rule-1",
+      "name": "硬编码密码",
+      "pattern": "(?i)password\\s*=\\s*[\"'][^\"']*[\"']",
+      "type": "security",
+      "severity": "high",
+      "triggerAI": false
+    },
+    {
+      "id": "rule-2",
+      "name": "SQL注入风险",
+      "pattern": "(?i)statement\\.execute\\([^)]*\\+[^)]*\\)",
+      "type": "security",
+      "severity": "high",
+      "triggerAI": false
+    },
+    {
+      "id": "rule-3",
+      "name": "不安全的API调用",
+      "pattern": "(?i)Runtime\\.getRuntime\\(\\)\\.exec\\(",
+      "type": "security",
+      "severity": "high",
+      "triggerAI": false
+    },
+    {
+      "id": "rule-4",
+      "name": "空指针风险",
+      "pattern": "\\.[a-zA-Z0-9_]+\\(\\)",
+      "type": "bug",
+      "severity": "medium",
+      "triggerAI": true
+    },
+    {
+      "id": "rule-5",
+      "name": "异常处理不当",
+      "pattern": "catch\\s*\\(\\s*Exception\\s+\\w+\\s*\\)\\s*\\{\\s*\\}",
+      "type": "code-quality",
+      "severity": "medium",
+      "triggerAI": false
+    }
+  ]
+}
