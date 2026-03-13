@@ -1,0 +1,23 @@
+{
+  "severityScore": {
+    "error": 100,
+    "warning": 60,
+    "info": 30
+  },
+  "locationScore": {
+    "service": 30,
+    "controller": 20,
+    "repository": 25,
+    "test": 5
+  },
+  "ruleWeight": {
+    "null-pointer": 50,
+    "empty-catch": 40,
+    "sql-injection": 100,
+    "system-out": 10
+  },
+  "limits": {
+    "maxIssuesPerFile": 2,
+    "maxIssuesPerPR": 10
+  }
+}
