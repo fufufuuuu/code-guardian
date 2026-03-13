@@ -1,6 +1,6 @@
 # CodeGuardian
 
-AI 驱动的代码审查系统，自动分析 Pull Request 中的代码变更，检测潜在问题并提供改进建议。
+AI 驱动的代码审查系统，自动分析 Pull Request 中的代码变更，直接在 PR 评论中提供高价值的建议，帮助团队发现潜在问题。。
 
 AI-powered code review system that automatically analyzes code changes in Pull Requests, detects potential issues, and provides improvement suggestions.
 
@@ -17,31 +17,46 @@ AI-powered code review system that automatically analyzes code changes in Pull R
 
 ## 系统架构 | System Architecture
 
+```mermaid
+graph TD
+    subgraph Webhook层[Webhook 层]
+        A[Gitee/GitHub Webhook]
+        B[WebhookController]
+    end
+    subgraph 业务层[业务层]
+        C[ReviewOrchestrator]
+        D[DiffParser]
+        E[ChunkSplitter]
+        F[RuleEngine]
+    end
+    subgraph AI层[AI 层]
+        G[AIReviewService]
+        H[IssueScorer]
+        I[IssueAggregator]
+    end
+    subgraph 评论层[评论层]
+        J[CommentService]
+    end
+
+    A --> B
+    B --> C
+    C --> D
+    C --> E
+    C --> F
+    C --> G
+    F --> H
+    G --> H
+    H --> I
+    I --> J
 ```
-┌─────────────┐     ┌──────────────────┐     ┌──────────────┐
-│ Webhook     │────>│ ReviewOrchestrator │────>│ GitClient    │
-└─────────────┘     └──────────────────┘     └──────────────┘
-                         │                          │
-                         ▼                          ▼
-┌─────────────┐     ┌──────────────────┐     ┌──────────────┐
-│ PR Comment  │<────│ CommentService   │<────│ PR Files     │
-└─────────────┘     └──────────────────┘     └──────────────┘
-                         │                          │
-                         ▼                          ▼
-┌─────────────┐     ┌──────────────────┐     ┌──────────────┐
-│ Issue       │<────│ IssueAggregator  │<────│ DiffParser   │
-└─────────────┘     └──────────────────┘     └──────────────┘
-                         │                          │
-                         ▼                          ▼
-┌─────────────┐     ┌──────────────────┐     ┌──────────────┐
-│ AI Review   │<────│ ReviewEngine     │<────│ ChunkSplitter│
-└─────────────┘     └──────────────────┘     └──────────────┘
-                         │
-                         ▼
-┌─────────────┐     ┌──────────────────┐
-│ Rule Engine │<────│ IssueScorer      │
-└─────────────┘     └──────────────────┘
-```
+
+### 架构说明 | Architecture Description
+
+- **Webhook 层**：接收 PR 事件
+- **业务层**：调度审查流程、解析 Diff、分割代码块、执行规则检查
+- **AI 层**：调用 DeepSeek 审查、打分、聚合 Issue
+- **评论层**：最终将审查结果评论到 PR
+- **数据流**：Webhook → ReviewOrchestrator → DiffParser/ChunkSplitter/RuleEngine → AIReviewService → IssueScorer → IssueAggregator → CommentService
 
 ### 核心组件 | Core Components
 
@@ -50,7 +65,7 @@ AI-powered code review system that automatically analyzes code changes in Pull R
 3. **DiffParser**：解析 PR diff，提取新增代码生成 CodeChunk
 4. **ChunkSplitter**：将大的代码块分割成小的代码块，适合 AI 审查
 5. **RuleEngine**：基于规则检测代码问题
-6. **ReviewEngine**：协调规则审查和 AI 审查
+6. **AIReviewService**：调用 AI 模型进行深度代码审查
 7. **IssueScorer**：对问题进行评分，用于排序和过滤
 8. **IssueAggregator**：聚合、排序和过滤问题
 9. **CommentService**：生成并发布 PR 评论
@@ -174,8 +189,8 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## 联系方式 | Contact
 
-- 项目地址：[https://github.com/code-guardian/code-guardian](https://github.com/code-guardian/code-guardian)
-- 问题反馈：[Issues](https://github.com/code-guardian/code-guardian/issues)
+- 项目地址：[https://github.com/fufufuuuu/code-guardian](https://github.com/fufufuuuu/code-guardian)
+- 问题反馈：[Issues](https://github.com/fufufuuuu/code-guardian/issues)
 
 ---
 

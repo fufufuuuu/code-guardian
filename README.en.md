@@ -15,31 +15,46 @@ AI-powered code review system that automatically analyzes code changes in Pull R
 
 ## System Architecture
 
+```mermaid
+graph TD
+    subgraph WebhookLayer[Webhook Layer]
+        A[Gitee/GitHub Webhook]
+        B[WebhookController]
+    end
+    subgraph BusinessLayer[Business Layer]
+        C[ReviewOrchestrator]
+        D[DiffParser]
+        E[ChunkSplitter]
+        F[RuleEngine]
+    end
+    subgraph AILayer[AI Layer]
+        G[AIReviewService]
+        H[IssueScorer]
+        I[IssueAggregator]
+    end
+    subgraph CommentLayer[Comment Layer]
+        J[CommentService]
+    end
+
+    A --> B
+    B --> C
+    C --> D
+    C --> E
+    C --> F
+    C --> G
+    F --> H
+    G --> H
+    H --> I
+    I --> J
 ```
-┌─────────────┐     ┌──────────────────┐     ┌──────────────┐
-│ Webhook     │────>│ ReviewOrchestrator │────>│ GitClient    │
-└─────────────┘     └──────────────────┘     └──────────────┘
-                         │                          │
-                         ▼                          ▼
-┌─────────────┐     ┌──────────────────┐     ┌──────────────┐
-│ PR Comment  │<────│ CommentService   │<────│ PR Files     │
-└─────────────┘     └──────────────────┘     └──────────────┘
-                         │                          │
-                         ▼                          ▼
-┌─────────────┐     ┌──────────────────┐     ┌──────────────┐
-│ Issue       │<────│ IssueAggregator  │<────│ DiffParser   │
-└─────────────┘     └──────────────────┘     └──────────────┘
-                         │                          │
-                         ▼                          ▼
-┌─────────────┐     ┌──────────────────┐     ┌──────────────┐
-│ AI Review   │<────│ ReviewEngine     │<────│ ChunkSplitter│
-└─────────────┘     └──────────────────┘     └──────────────┘
-                         │
-                         ▼
-┌─────────────┐     ┌──────────────────┐
-│ Rule Engine │<────│ IssueScorer      │
-└─────────────┘     └──────────────────┘
-```
+
+### Architecture Description
+
+- **Webhook Layer**：Receive PR events
+- **Business Layer**：Schedule review process, parse Diff, split code chunks, execute rule checks
+- **AI Layer**：Call DeepSeek for review, score issues, aggregate issues
+- **Comment Layer**：Finally comment review results to PR
+- **Data Flow**：Webhook → ReviewOrchestrator → DiffParser/ChunkSplitter/RuleEngine → AIReviewService → IssueScorer → IssueAggregator → CommentService
 
 ### Core Components
 
@@ -48,7 +63,7 @@ AI-powered code review system that automatically analyzes code changes in Pull R
 3. **DiffParser**：Parse PR diff, extract added code to generate CodeChunk
 4. **ChunkSplitter**：Split large code chunks into small ones suitable for AI review
 5. **RuleEngine**：Detect code issues based on rules
-6. **ReviewEngine**：Coordinate rule-based and AI review
+6. **AIReviewService**：Call AI models for deep code review
 7. **IssueScorer**：Score issues for ranking and filtering
 8. **IssueAggregator**：Aggregate, rank, and filter issues
 9. **CommentService**：Generate and publish PR comments
@@ -170,8 +185,8 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Contact
 
-- Project URL：[https://github.com/code-guardian/code-guardian](https://github.com/code-guardian/code-guardian)
-- Issue Tracker：[Issues](https://github.com/code-guardian/code-guardian/issues)
+- Project URL：[https://github.com/fufufuuuu/code-guardian](https://github.com/fufufuuuu/code-guardian)
+- Issue Tracker：[Issues](https://github.com/fufufuuuu/code-guardian/issues)
 
 ---
 
